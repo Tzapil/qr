@@ -21,3 +21,7 @@
 	[string require-length]
 	(let [zeros-count (- require-length (count string))]
 		(add-zeros-back string zeros-count)))
+
+(defn num-to-byn
+	[numb]
+	(Integer/toString numb 2))

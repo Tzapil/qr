@@ -1,5 +1,5 @@
 (ns qr.core
-  (:require [qr.encode :as encode])
+  (:require [qr.encode.core :as encode])
   (:gen-class))
 
 (defn enc [string]
