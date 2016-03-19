@@ -26,5 +26,9 @@
 	[numb]
 	(Integer/toString numb 2))
 
+(defn byn-to-num
+	[byn]
+	(Integer/parseInt byn 2))
+
 (defn log-base [n base]
   (/ (Math/log n) (Math/log base)))

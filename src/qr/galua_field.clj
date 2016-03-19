@@ -29,7 +29,9 @@
 
 (defn galua-multiply
 	[n1 n2]
-	(galua-pow 2 (mod (+ (galua-log n1 2) (galua-log n2 2)) 255)))
+	(if (not (or (= n1 0) (= n2 0)))
+		(galua-pow 2 (mod (+ (galua-log n1 2) (galua-log n2 2)) 255))
+		0))
 
 (defn galua-division
 	[n1 n2]

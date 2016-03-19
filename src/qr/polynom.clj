@@ -36,3 +36,13 @@
 		(let [prev-step (dec step)]
 			(multiple-polynoms (generator-polynom prev-step) [1 (galua/galua-pow 2 prev-step)]))
 		[1 1]))
+
+(defn normalize-polynom
+	[polynom normalizer]
+	(let [f (first polynom)
+		  mult (galua/galua-division normalizer f)]
+		  (multiple-polynom-by-num polynom mult)))
+
+(defn trim-polynom
+	[polynom]
+	(drop-while #(= % 0) polynom))
