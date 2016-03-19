@@ -67,5 +67,5 @@
 	(let [string (clojure.string/upper-case in-string)]
 		(apply str 
 			(map (fn [pair] 
-				(apply encode-part   (map #(get alphanumeric-table %) pair)))
-			(partition-all 2 string)))))
+					(apply encode-part (map #(get alphanumeric-table %) pair)))
+				(partition-all 2 string)))))

@@ -14,4 +14,4 @@
 (defn break-groups [string [{:blocks blocks-count :codewords codewords-count} & others]]
 	(let [size (* blocks-count codewords-count 8)
 		  group (break-blocks (take size string) blocks-count break-codewords)]
-		(conj group (break-groups (take-last (- (count string) size) string) others))))
+		(conj group (break-groups (apply str (drop size string)) others))))
