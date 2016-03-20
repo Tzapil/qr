@@ -83,7 +83,9 @@
 	(let [groups (break-groups string groups)
 		  correction-codewords (correction-groups groups)
 		  raw-seq (concat (interleave-groups groups) (interleave-groups correction-codewords))]
-		(add-reminder-bits (convert-to-binary raw-seq))))
+		  (-> raw-seq
+		  	convert-to-binary
+		  	add-reminder-bits)))
 
 ;;(defn Rid-Solomon-correction-group
 ;;	[[group & others]]

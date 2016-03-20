@@ -23,4 +23,5 @@
   "I don't do a whole lot ... yet."
   [& args]
   (println "Hello, World!")
-  (svg-paint))
+  (svg-paint)
+  (println (enc "hello world")))
