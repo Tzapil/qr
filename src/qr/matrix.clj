@@ -17,49 +17,61 @@
  	(apply vector (repeat size (apply vector (repeat size 9)))))
 
 (defn set-pixel
-	[field x y value]
+	[x y value field]
 	(assoc-in field [y x] value)) 
 
 (defn draw-pattern-flat
-	[field line x y]
+	[x y line field]
 	(let [size-x (count line)]
 		(loop [iterator-x 0
 			   new-field field]
 			   (if (< iterator-x size-x)
-					(recur (inc iterator-x) (set-pixel new-field (+ x iterator-x) y (get line iterator-x)))
+					(recur (inc iterator-x) (set-pixel (+ x iterator-x) y (get line iterator-x) new-field))
 					new-field))))
 
 (defn draw-pattern
-	[field pattern x y]
+	[x y pattern field]
 	(let [size-y (count pattern)]
 		(loop [iterator-y 0
 			   new-field field]
 			(if (< iterator-y size-y)
-				(recur (inc iterator-y) (draw-pattern-flat new-field (get pattern iterator-y) x (+ y iterator-y)))
+				(recur (inc iterator-y) (draw-pattern-flat x (+ y iterator-y) (get pattern iterator-y) new-field))
 				new-field))))
 
 (defn draw-line-x
-	[field x y length value]
-	(draw-pattern field [(apply vector (repeat length value))] x y))
+	[x y length value field]
+	(draw-pattern x y [(apply vector (repeat length value))] field))
 
 (defn draw-line-y
-	[field x y length value]
-	(draw-pattern field (apply vector (repeat length [value])) x y))
+	[x y length value field]
+	(draw-pattern x y (apply vector (repeat length [value])) field))
 
 (defn add-left-top-fp
 	[field]
-	(draw-line-y (draw-line-x (draw-pattern field finding-pattern 0 0) 0 7 8 0) 7 0 8 0))
+	(->> field
+		(draw-pattern 0 0 finding-pattern)
+		(draw-line-x 0 7 8 0)
+		(draw-line-y 7 0 8 0 )))
 
 (defn add-right-top-fp
 	[field]
 	(let [x-pos (- size 7)]
-		(draw-line-y (draw-line-x (draw-pattern field finding-pattern x-pos 0) (dec x-pos) 7 8 0) (dec x-pos) 0 8 0)))
+		(->> field
+			(draw-pattern x-pos 0 finding-pattern)
+			(draw-line-x (dec x-pos) 7 8 0)
+			(draw-line-y (dec x-pos) 0 8 0))))
 
 (defn add-left-bottom-fp
 	[field]
 	(let [y-pos (- size 7)]
-		(draw-line-y (draw-line-x (draw-pattern field finding-pattern 0 y-pos) 0 (dec y-pos) 8 0) 7 (dec y-pos) 8 0)))
+		(->> field
+			(draw-pattern 0 y-pos finding-pattern)
+			(draw-line-x 0 (dec y-pos) 8 0)
+			(draw-line-y 7 (dec y-pos) 8 0))))
 
 (defn add-fiding-patterns
 	[field]
-	(add-left-bottom-fp (add-left-top-fp (add-right-top-fp field))))
+	(-> field
+		add-right-top-fp
+		add-left-top-fp
+		add-left-bottom-fp))
