@@ -14,7 +14,7 @@
 
  (defn build-template
  	[size]
- 	(apply vector (repeat size (apply vector (repeat size 9)))))
+ 	(vec (repeat size (vec (repeat size 9)))))
 
 (defn set-pixel
 	[x y value field]
@@ -40,11 +40,11 @@
 
 (defn draw-line-x
 	[x y length value field]
-	(draw-pattern x y [(apply vector (repeat length value))] field))
+	(draw-pattern x y [(vec (repeat length value))] field))
 
 (defn draw-line-y
 	[x y length value field]
-	(draw-pattern x y (apply vector (repeat length [value])) field))
+	(draw-pattern x y (vec (repeat length [value])) field))
 
 (defn add-left-top-fp
 	[field]
@@ -68,6 +68,20 @@
 			(draw-pattern 0 y-pos finding-pattern)
 			(draw-line-x 0 (dec y-pos) 8 0)
 			(draw-line-y 7 (dec y-pos) 8 0))))
+
+(defn- counter []  
+  (let [tick (atom 0)]
+    #(swap! tick (fn [n] (mod (inc n) 2)))))
+
+(defn add-timing-patterns
+	[field]
+	(let [t1 (counter)
+		t2 (counter)
+		length (- size 16)]
+		(->> field
+			(draw-pattern 8 7 [(vec (repeatedly length t1))])
+			(draw-pattern 7 8 (vec (repeatedly length #(vector (t2))))))))
+
 
 (defn add-fiding-patterns
 	[field]

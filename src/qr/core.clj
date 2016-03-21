@@ -12,7 +12,10 @@
 
 (defn find-patt
 	[]
-	(matrix/add-fiding-patterns (matrix/build-template 21)))
+  (->>
+    (matrix/build-template 21)
+    matrix/add-fiding-patterns
+    matrix/add-timing-patterns))
 
 (defn svg-paint
 	[]
