@@ -20,6 +20,10 @@
 	[x y value field]
 	(assoc-in field [y x] value)) 
 
+(defn get-pixel
+	[x y field]
+	(get-in field [y x])) 
+
 (defn draw-pattern-flat
 	[x y line field]
 	(let [size-x (count line)]
@@ -83,9 +87,29 @@
 			(draw-pattern 7 8 (vec (repeatedly length #(vector (t2))))))))
 
 
+(defn add-black-mark
+	[field]
+	(set-pixel 8 (- size 8) 1 field))
+
 (defn add-fiding-patterns
 	[field]
 	(-> field
 		add-right-top-fp
 		add-left-top-fp
 		add-left-bottom-fp))
+
+(defn add-data-step
+	[data x y steps field]
+	(let steps-count (count steps)
+		(loop [curx-x x
+			   curx-y y
+			   counter 0
+			   [pixel & others] data
+			   new-field field]
+			   (if (and (< curx-x size) (< curx-y size) (>= curx-y 0) (>= curx-x 0))
+			   		(let [cur-pixel (get-pixel curx-x curx-y new-field)]
+			   			(if (= cur-pixel 9)
+			   				(recur (+ curx-x (get-in steps [counter 0])) (+ curx-x (get-in steps [counter 1])) (mod (inc counter) steps-count) others (set-pixel curx-x curx-y pixel new-field))
+			   				(recur (+ curx-x (get-in steps [counter 0])) (+ curx-x (get-in steps [counter 1])) (mod (inc counter) steps-count) others new-field)))
+			   		new-field)
+			   )))

@@ -15,7 +15,8 @@
   (->>
     (matrix/build-template 21)
     matrix/add-fiding-patterns
-    matrix/add-timing-patterns))
+    matrix/add-timing-patterns
+    matrix/add-black-mark))
 
 (defn svg-paint
 	[]
