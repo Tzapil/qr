@@ -1,6 +1,7 @@
 (ns qr.matrix)
 
 (def version 1)
+(defn error-correction-level 3)
 (def size (+ (* (- version 1) 4) 21))
 
 (def finding-pattern
@@ -97,6 +98,10 @@
 		add-right-top-fp
 		add-left-top-fp
 		add-left-bottom-fp))
+
+(defn add-alignment-patterns
+	[field]
+	field)
 
 (defn add-data-step
 	[data x y steps field]
