@@ -72,7 +72,7 @@
 
 (defn convert-to-binary
 	[numbers]
-	(apply str (map helpers/num-to-byn numbers)))
+	(apply str (map #(helpers/lead-zeros (helpers/num-to-byn %) 8) numbers)))
 
 (defn add-reminder-bits
 	[string]
