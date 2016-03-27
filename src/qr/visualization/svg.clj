@@ -3,7 +3,7 @@
 (def colours {0 "white"
 			  1 "black"
 			  9 "gray"
-			  5 "blue"})
+			  2 "blue"})
 
 (def width 10)
 (def height 10)

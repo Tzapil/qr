@@ -20,7 +20,8 @@
     matrix/add-alignment-patterns
     matrix/add-black-mark
     matrix/reserve-information-area
-    (matrix/add-data-to-field (map #(helpers/byn-to-num (str %)) data))))
+    (matrix/add-data-to-field (map #(helpers/byn-to-num (str %)) data))
+    matrix/remove-reserved))
 
 (defn svg-paint
 	[data]

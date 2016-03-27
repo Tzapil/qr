@@ -106,12 +106,16 @@
 (defn reserve-information-area
 	[field]
 	(->> field
-		(draw-pattern (- size 8) 8 [(vec (repeat 8 5))])	;; top-right corner
-		(draw-pattern 8 (- size 7) (vec (repeat 7 [5])))	;; bottom-left corner
-		(draw-pattern 0 8 [(vec (repeat 6 5))])				;; top-left-horizontal
-		(draw-pattern 8 0 (vec (repeat 6 [5])))				;; top-left-vertical
-		(draw-pattern 7 7 [[0 5]							;; top-left-corner
-						   [5 5]])))
+		(draw-pattern (- size 8) 8 [(vec (repeat 8 2))])	;; top-right corner
+		(draw-pattern 8 (- size 7) (vec (repeat 7 [2])))	;; bottom-left corner
+		(draw-pattern 0 8 [(vec (repeat 6 2))])				;; top-left-horizontal
+		(draw-pattern 8 0 (vec (repeat 6 [2])))				;; top-left-vertical
+		(draw-pattern 7 7 [[0 2]							;; top-left-corner
+						   [2 2]])))
+
+(defn remove-reserved
+	[field]
+	(vec (map (fn [row] (vec (map #(mod % 2) row))) field)))
 
 (def empty-pixel 9)
 
@@ -141,7 +145,6 @@
 			   counter 0
 			   [pixel & others] data
 			   new-field field]
-			   ;;(println "SMALL: " curx-x ", " curx-y)
 			   (if (and (< curx-y size) (>= curx-y 0))
 			   		(let [cur-pixel (get-pixel curx-x curx-y new-field)
 			   			current-step (steps counter)
@@ -178,8 +181,5 @@
 			   		 	  empty-pixels (count-empty-pixels curx-x curx-y steps new-field)
 			   		 	  w-data (take empty-pixels rest-data)
 			   		 	  r-data (drop empty-pixels rest-data)]
-			   		 	  	(println "BIG: " curx-x)
-			   		 	  	(println "EMPTY_PIX: " empty-pixels)
-			   		 	  	(println "W_DATA: " w-data)
 			   				(recur next-x r-data next-counter (add-data-step curx-x curx-y w-data steps new-field)))
 			   		new-field))))
