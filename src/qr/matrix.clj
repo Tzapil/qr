@@ -183,3 +183,22 @@
 			   		 	  r-data (drop empty-pixels rest-data)]
 			   				(recur next-x r-data next-counter (add-data-step curx-x curx-y w-data steps new-field)))
 			   		new-field))))
+
+(defn walk-matrix-row
+	[function accum y field]
+	(let [row (field y)
+		  size (count row)]
+		(loop [x 0
+			   result accum]
+			(if (< x size)
+				(recur (inc x) (function result x y))
+				result))))
+
+(defn walk-matrix
+	[function accum field]
+	(let [size (count field)]
+		(loop [y 0
+			   result accum]
+			(if (< y size)
+				(recur (inc y) (walk-matrix-row function result y field))
+				result))))

@@ -5,7 +5,8 @@
   			[qr.encode.correction :as correction]
   			[qr.matrix :as matrix]
   			[qr.visualization.svg :as svg]
-  			[qr.helpers :as helpers])
+  			[qr.helpers :as helpers]
+        [qr.masking :as masking])
   (:gen-class))
 
 (defn enc [string]

@@ -5,6 +5,9 @@
 (def error-correction-level 3)
 (def size (+ (* (- version 1) 4) 21))
 
+(def ^:dynamic *penalty-value*)
+(def ^:dynamic *penalty-pattern*)
+
 (defn- floor
 	[number]
 	(int (Math/floor number)))
@@ -23,6 +26,20 @@
 (defn mask-pixel
 	[value]
 	(mod (inc value) 2))
+
+(defn penalty-pattern
+	[pattern penalty-size field]
+	(matrix/walk-matrix 
+		(fn [result x y]
+			(if-let [equal (matrix/walk-matrix 
+								(fn [result px py]
+									(and result (= (matrix/get-pixel px py pattern) (matrix/get-pixel (+ x px) (+ y py) field)))) 
+								true
+								pattern)]
+					(+ result penalty-size)
+					result)) 
+		0 
+		field))
 
 (defn same-colour-pixels
 	[pixel & others]
@@ -45,54 +62,27 @@
 (defn reverse-field
 	[field]
 	(let [size (count (first field))]
-		[(map (fn [column] (map #(% column) field)) (take size (iterate inc 0)))]))
+		(vec (map (fn [column] (vec (map #(% column) field))) (take size (iterate inc 0))))))
 
-(defn first-penaly
+(defn first-penalty
 	[field]
 	(let [row-penalty (reduce #(+ %1 (first-penaly-row %2)) 0 field)
 		  columns-penalty (reduce #(+ %1 (first-penaly-row %2)) 0 (reverse-field field))]
 		  (+ row-penalty columns-penalty)))
 
-(defn second-penalty-xy
-	[x y field]
-	(let [steps [[0 0] [1 0] [0 1] [1 1]]
-		  pixels (map #(matrix/get-pixel (+ x (% 0)) (+ y (% 1)) field) steps)]
-		(if (apply = pixels)
-			3
-			0)))
-
-(defn second-penalty-row
-	[y field]
-	(loop [x 0
-		   penalty 0]
-		   (if (< x size)
-		   		(recur (inc x) (+ penalty (second-penalty-xy x y field)))
-		   		penalty)))
-
 (defn second-penalty
 	[field]
-	(loop [y 0
-		   penalty 0]
-		   (if (< y size)
-		   		(recur (inc y) (+ penalty (second-penalty-row y field)))
-		   		penalty)))
+	(let [patterns [
+		[[0 0] 
+		 [0 0]] 
+		[[1 1] 
+		 [1 1]]]]
+		 (reduce #(+ %1 (penalty-pattern %2 3 field)) 0 patterns)))
 
-(defn penalty-pattern-point
-	[pattern value x y field]
-		)
-
-(defn penalty-pattern-row
-	[pattern value y field]
-	(loop [x 0
-		   penalty 0]
-		   (if (< x size)
-		   		(recur (inc x) (+ penalty (penalty-pattern-point pattern value x y field)))
-		   		penalty)))
-
-(defn penalty-pattern
-	[pattern value field]
-	(loop [y 0
-		   penalty 0]
-		   (if (< y size)
-		   		(recur (inc y) (+ penalty (penalty-pattern-row pattern value y field)))
-		   		penalty)))
+(defn third-penalty
+	[field]
+	(let [patterns [ [ [0 0 0 0 1 0 1 1 1 0 1] ] [ [1 0 1 1 1 0 1 0 0 0 0] ] ] 
+		  horizontal (reduce #(+ %1 (penalty-pattern %2 40 field)) 0 patterns)
+		  reversed (reverse-field field)
+		  vertical (reduce #(+ %1 (penalty-pattern %2 40 reversed)) 0 patterns)]
+		 (+ horizontal vertical)))
