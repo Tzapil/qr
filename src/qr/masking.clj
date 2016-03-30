@@ -86,3 +86,19 @@
 		  reversed (reverse-field field)
 		  vertical (reduce #(+ %1 (penalty-pattern %2 40 reversed)) 0 patterns)]
 		 (+ horizontal vertical)))
+
+(defn fourth-penalty
+	[field]
+	(let [size (* size size)
+		  black (reduce (fn [accum row] (reduce #(+ %1 %2) accum row)) 0 field)
+		  percent (* (black/size) 100)
+		  low-value (- percent (mod percent 5))
+		  hi-value (+ low-value 5)
+		  abs-lv (/ (Math/abs (- 50 low-value)) 5)
+		  abs-hv (/ (Math/abs (- 50 hi-value)) 5)]
+		 (* (min abs-lv abs-hv) 10)))
+
+(defn calc-penalty
+	[field]
+	(let [penalties [first-penalty second-penalty third-penalty fourth-penalty]]
+		(reduce #(+ %1 (%2 field)) 0 penalties)))
