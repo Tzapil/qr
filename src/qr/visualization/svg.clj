@@ -16,11 +16,11 @@
 (defn draw-pattern-flat
 	[line y]
 	(let [size-x (count line)
-		  yh (* y height)]
+		  yh (* (+ y 4) height)]
 		(loop [iterator-x 0
 			   pixels []]
 			   (if (< iterator-x size-x)
-					(recur (inc iterator-x) (conj pixels (point (* iterator-x width) yh width height (line iterator-x))))
+					(recur (inc iterator-x) (conj pixels (point (* (+ iterator-x 4) width) yh width height (line iterator-x))))
 					pixels))))
 
 (defn draw-field
@@ -35,6 +35,6 @@
 (defn xml
   "svg 'template', which also flips the coordinate system"
   [qr-field]
-  (str "<svg height=\"210px\" width=\"210px\">"
+  (str "<svg height=\"300px\" width=\"300px\">"
        (apply str (draw-field qr-field))
        "</svg>"))

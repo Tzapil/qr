@@ -132,12 +132,15 @@
 								clear-field (matrix/remove-reserved masked)
 								penalty (calc-penalty clear-field)] {:field clear-field :penalty penalty :mask %}) mask-predicates)
 		 						minimum (reduce (fn [minimum current] (if (> (:penalty minimum) (:penalty current)) current minimum)) {:penalty 32000} penalties)
-		 						information (get (get-in minimum [:mask :num]) information)]
+		 						info (nth information (get-in minimum [:mask :num]))]
+		(println info)
 		(->>
 			:field
 			minimum
-			(matrix/draw-pattern 0 8 [(vec (map #(helpers/byn-to-num (str %)) (reverse (drop 9 information))))])
-			;;(matrix/draw-pattern 7 8 [(vec (map #(helpers/byn-to-num (str %)) (reverse (take 2 (drop 7 information)))))])
-			;;(matrix/draw-pattern 8 0 [(map #(vec (helpers/byn-to-num (str %))) (take 6 information))])
-			;;(matrix/set-pixel 8 7 (helpers/byn-to-num (str (nth information 6))))
+			(matrix/draw-pattern 0 8 [(vec (map #(helpers/byn-to-num (str %)) (reverse (drop 9 info))))])
+			(matrix/draw-pattern 8 8 [(vec (map #(helpers/byn-to-num (str %)) (reverse (take 2 (drop 7 info)))))])
+			(matrix/draw-pattern 8 0 (vec (map #(conj [] (helpers/byn-to-num (str %))) (take 6 info))))
+			(matrix/set-pixel 8 7 (helpers/byn-to-num (str (nth information 6))))
+			(matrix/draw-pattern (- size 8) 8 [(vec (map #(helpers/byn-to-num (str %)) (reverse (take 8 info))))])
+			(matrix/draw-pattern 8 (- size 7) (vec (map #(conj [] (helpers/byn-to-num (str %))) (drop 8 info))))
 			)))
