@@ -5,13 +5,13 @@
 (def size (+ (* (- version 1) 4) 21))
 
 (def finding-pattern
-	[[1 1 1 1 1 1 1]
-	 [1 0 0 0 0 0 1]
-	 [1 0 1 1 1 0 1]
-	 [1 0 1 1 1 0 1]
-	 [1 0 1 1 1 0 1]
-	 [1 0 0 0 0 0 1]
-	 [1 1 1 1 1 1 1]])
+	[[3 3 3 3 3 3 3]
+	 [3 2 2 2 2 2 3]
+	 [3 2 3 3 3 2 3]
+	 [3 2 3 3 3 2 3]
+	 [3 2 3 3 3 2 3]
+	 [3 2 2 2 2 2 3]
+	 [3 3 3 3 3 3 3]])
 
  (defn build-template
  	[size]
@@ -55,28 +55,28 @@
 	[field]
 	(->> field
 		(draw-pattern 0 0 finding-pattern)
-		(draw-line-x 0 7 8 0)
-		(draw-line-y 7 0 8 0 )))
+		(draw-line-x 0 7 8 2)
+		(draw-line-y 7 0 8 2)))
 
 (defn add-right-top-fp
 	[field]
 	(let [x-pos (- size 7)]
 		(->> field
 			(draw-pattern x-pos 0 finding-pattern)
-			(draw-line-x (dec x-pos) 7 8 0)
-			(draw-line-y (dec x-pos) 0 8 0))))
+			(draw-line-x (dec x-pos) 7 8 2)
+			(draw-line-y (dec x-pos) 0 8 2))))
 
 (defn add-left-bottom-fp
 	[field]
 	(let [y-pos (- size 7)]
 		(->> field
 			(draw-pattern 0 y-pos finding-pattern)
-			(draw-line-x 0 (dec y-pos) 8 0)
-			(draw-line-y 7 (dec y-pos) 8 0))))
+			(draw-line-x 0 (dec y-pos) 8 2)
+			(draw-line-y 7 (dec y-pos) 8 2))))
 
 (defn- counter []  
   (let [tick (atom 0)]
-    #(swap! tick (fn [n] (mod (inc n) 2)))))
+    #(swap! tick (fn [n] (+ (mod (inc n) 2) 2)))))
 
 (defn add-timing-patterns
 	[field]
@@ -90,7 +90,7 @@
 
 (defn add-black-mark
 	[field]
-	(set-pixel 8 (- size 8) 1 field))
+	(set-pixel 8 (- size 8) 3 field))
 
 (defn add-fiding-patterns
 	[field]
@@ -110,7 +110,7 @@
 		(draw-pattern 8 (- size 7) (vec (repeat 7 [2])))	;; bottom-left corner
 		(draw-pattern 0 8 [(vec (repeat 6 2))])				;; top-left-horizontal
 		(draw-pattern 8 0 (vec (repeat 6 [2])))				;; top-left-vertical
-		(draw-pattern 7 7 [[0 2]							;; top-left-corner
+		(draw-pattern 7 7 [[2 2]							;; top-left-corner
 						   [2 2]])))
 
 (defn remove-reserved
@@ -202,3 +202,7 @@
 			(if (< y size)
 				(recur (inc y) (walk-matrix-row function result y field))
 				result))))
+
+(defn print-field
+	[field]
+	(vec (map #(or (println %) %) field)))

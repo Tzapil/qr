@@ -8,6 +8,8 @@
 		:codewords 13
 	}])
 
+(def correction-level "Q")
+
 (def correction-codewords 13)
 (def data-codewords 13)
 (def reminder-bits 0)

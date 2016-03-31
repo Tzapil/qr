@@ -22,7 +22,7 @@
     matrix/add-black-mark
     matrix/reserve-information-area
     (matrix/add-data-to-field (map #(helpers/byn-to-num (str %)) data))
-    matrix/remove-reserved))
+    masking/mask))
 
 (defn svg-paint
 	[data]
