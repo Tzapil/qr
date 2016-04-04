@@ -1,36 +1,13 @@
 # qr
 
-FIXME: description
-
-## Installation
-
-Download from http://example.com/FIXME.
+A programm for qr codes generation on clojure.
 
 ## Usage
 
-FIXME: explanation
-
-    $ java -jar qr-0.1.0-standalone.jar [args]
-
-## Options
-
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Bugs
-
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
+$ java -jar qr-0.1.0-standalone.jar [args]
 
 ## License
 
-Copyright © 2016 FIXME
+Copyright (c) 2016 du.kualevskiy <du.kulaevskiy@gmail.com>
 
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+Distributed under the MIT Public License.
