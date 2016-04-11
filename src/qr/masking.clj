@@ -1,6 +1,7 @@
 (ns qr.masking
 	(:require 
 		[qr.matrix :as matrix]
+		[qr.field :as field]
 		[qr.helpers :as helpers]))
 
 (def version 1)
@@ -43,11 +44,11 @@
 
 (defn penalty-pattern
 	[pattern penalty-size field]
-	(matrix/walk-matrix 
+	(matrix/walk
 		(fn [result x y]
-			(if-let [equal (matrix/walk-matrix 
+			(if-let [equal (matrix/walk
 								(fn [result px py]
-									(and result (= (matrix/get-pixel px py pattern) (matrix/get-pixel (+ x px) (+ y py) field)))) 
+									(and result (= (matrix/get-value px py pattern) (matrix/get-value (+ x px) (+ y py) field)))) 
 								true
 								pattern)]
 					(+ result penalty-size)
@@ -119,17 +120,17 @@
 
 (defn put-mask
 	[predicate field]
-	(matrix/walk-matrix (fn [result x y] 
-		(let [pixel (matrix/get-pixel x y result)]
+	(matrix/walk (fn [result x y] 
+		(let [pixel (matrix/get-value x y result)]
 			(if (and (< pixel 2) (predicate x y))
-				(matrix/set-pixel x y (mask-pixel pixel) result)
+				(matrix/set-value x y (mask-pixel pixel) result)
 				result)))
 	field field))
 
 (defn mask
 	[field]
 	(let [penalties (map #(let [masked (put-mask (:predicate %) field)
-								clear-field (matrix/remove-reserved masked)
+								clear-field (field/remove-reserved masked)
 								penalty (calc-penalty clear-field)] {:field clear-field :penalty penalty :mask %}) mask-predicates)
 		 						minimum (reduce (fn [minimum current] (if (> (:penalty minimum) (:penalty current)) current minimum)) {:penalty 32000} penalties)
 		 						info (nth information (get-in minimum [:mask :num]))]
@@ -140,7 +141,7 @@
 			(matrix/draw-pattern 0 8 [(vec (map #(helpers/byn-to-num (str %)) (reverse (drop 9 info))))])
 			(matrix/draw-pattern 8 8 [(vec (map #(helpers/byn-to-num (str %)) (reverse (take 2 (drop 7 info)))))])
 			(matrix/draw-pattern 8 0 (vec (map #(conj [] (helpers/byn-to-num (str %))) (take 6 info))))
-			(matrix/set-pixel 8 7 (helpers/byn-to-num (str (nth information 6))))
+			(matrix/set-value 8 7 (helpers/byn-to-num (str (nth information 6))))
 			(matrix/draw-pattern (- size 8) 8 [(vec (map #(helpers/byn-to-num (str %)) (reverse (take 8 info))))])
 			(matrix/draw-pattern 8 (- size 7) (vec (map #(conj [] (helpers/byn-to-num (str %))) (drop 8 info))))
 			)))

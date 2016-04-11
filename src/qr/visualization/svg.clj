@@ -32,7 +32,7 @@
 				(recur (inc iterator-y) (concat pixels (draw-pattern-flat (get field iterator-y) iterator-y)))
 				pixels))))
 
-(defn xml
+(defn draw
   "svg 'template', which also flips the coordinate system"
   [qr-field]
   (str "<svg height=\"300px\" width=\"300px\">"

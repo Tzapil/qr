@@ -3,7 +3,7 @@
   			[qr.galua-field :as galua]
   			[qr.polynom :as polynom]
   			[qr.encode.correction :as correction]
-  			[qr.matrix :as matrix]
+  			[qr.field :as matrix]
   			[qr.visualization.svg :as svg]
   			[qr.helpers :as helpers]
         [qr.masking :as masking])
@@ -27,7 +27,7 @@
 (defn svg-paint
 	[data]
 	(let [filename "qr_code.html"]
-		(spit filename (svg/xml (find-patt data)))))
+		(spit filename (svg/draw (find-patt data)))))
 
 (defn -main
   "I don't do a whole lot ... yet."

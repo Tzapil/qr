@@ -2,15 +2,15 @@
   (:require [clojure.test :refer :all]
             [qr.matrix :refer :all]))
 
-(deftest bt-test
-  (testing "Build Template"
-    (doseq [size [21 42 56 34 33 45 100]]
-        (let [template (build-template size)
-              y-size (count template)
-              x-sizes (map #(count %) template)]
-            (is (= y-size size))
-            (is (not (some #(not (= size %)) x-sizes)))
-            (is (not (some (fn [row] (some #(not (= 9 %)) row)) template)))))))
+;;(deftest bt-test
+;;  (testing "Build Template"
+;;    (doseq [size [21 42 56 34 33 45 100]]
+;;        (let [template (build-template size)
+;;              y-size (count template)
+;;              x-sizes (map #(count %) template)]
+;;            (is (= y-size size))
+;;            (is (not (some #(not (= size %)) x-sizes)))
+;;            (is (not (some (fn [row] (some #(not (= 9 %)) row)) template)))))))
 
 (deftest gp-test
   (testing "Get Pixel From Field"
@@ -35,7 +35,7 @@
                 (is (= v (get-pixel x y field))))))))
 
 (deftest sp-test
-  (testing "Set Pixel From Field"
+  (testing "Set Pixel In Field"
     (let [field [[0 0 0 0 0 0]
                  [0 0 0 0 0 0]]
           test-data [{:x 1 :y 1 :v 1}
@@ -91,7 +91,7 @@
             (let [tfield (reduce (fn [nfield {x :x y :y l :l v :v}] (draw-line-x x y l v nfield)) field test-data)]
             	(is (equal rfield tfield))))))
 
-(def dly-test
+(deftest dly-test
     (testing "Draw Y Line"
         (let [field [[0 0 0 0 0 0]
                      [0 0 0 0 0 0]
