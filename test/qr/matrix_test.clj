@@ -32,7 +32,7 @@
                        {:x -1 :y 3 :v nil}]]
         (doseq [t test-data]
             (let [{x :x y :y v :v} t]
-                (is (= v (get-pixel x y field))))))))
+                (is (= v (get-value x y field))))))))
 
 (deftest sp-test
   (testing "Set Pixel In Field"
@@ -43,8 +43,8 @@
                        {:x 2 :y 1 :v 5}]]
         (doseq [t test-data]
             (let [{x :x y :y v :v} t
-                  new-field (set-pixel x y v field)]
-                (is (= v (get-pixel x y new-field))))))))
+                  new-field (set-value x y v field)]
+                (is (= v (get-value x y new-field))))))))
 
 (deftest eq-test
 	(testing "Equal Function"
