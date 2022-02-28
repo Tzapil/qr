@@ -4,7 +4,7 @@
 		[qr.mode :as mode]
 		[qr.encode.alphanumeric :as alphanumeric]))
 
-(def maximum-capacity (* 13 8))	;; 104
+(def maximum-capacity (* 19 8))	;; 152
 
 (def pads ["11101100" "00010001"])
 
@@ -43,4 +43,7 @@
 	[in-string]
 	(let [raw-string (encode-raw in-string)
 		  missing-zeros (- maximum-capacity (count raw-string))]
-		(add-pads (multiple-length-by (helpers/add-zeros-back raw-string (min missing-zeros 4)) 8))))
+		(println "BOOM")
+		(println raw-string)
+		(println missing-zeros)
+		(add-pads (multiple-length-by raw-string 8))))

@@ -10,7 +10,11 @@
   (:gen-class))
 
 (defn enc [string]
-	(correction/RS-correction (encode/encode string)))
+	(let [encoded (encode/encode string)]
+    (println "WO CORRECTION")
+    (println encoded)
+    (println (count encoded))
+    (correction/RS-correction encoded)))
 
 (defn find-patt
 	[data]
@@ -32,7 +36,7 @@
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
-  (let [encounted (enc "hello world")]
+  (let [encounted (enc "HELLO")]
   		(println (count encounted))
   		(println encounted)
   		(svg-paint encounted)))
